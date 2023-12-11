@@ -1,0 +1,70 @@
+Project Ecommerce {database_type: 'PostgreSQL'
+Note: '''# Movie Database **This database is built for movie review dashboard applications. There are several important tables: movies, genres, movie_release, etc. The purpose of the project is to be able to provide a comprehensive movie information based on users preferences**'''}
+
+Table movies as M {
+id int [pk]
+title varchar
+release_date varchar
+language varchar
+description varchar
+runtime int
+poster_image varchar
+score float
+note: "table 'movies' contains meta information about the movie"
+}
+Table genres as G {
+id int [pk]
+genre varchar [pk]
+note: "table 'genres' contains the movie id and genre."
+}
+Table language as L {
+code varchar [pk]
+value varchar [pk]
+note: "table 'language' contains the movie language information."
+}
+Table country_code as CC {
+iso_3166_1 varchar [pk]
+alpha3 varchar
+name varchar
+note: "table 'country_code' contains the country code and later used to merge with the movie release."
+
+}
+Table movie_release as MR {
+movie_id int [pk]
+iso_3166_1 varchar
+release_type varchar
+release_date varchar
+release_time varchar
+note: "table 'movie_release' contains the movie release information."
+}
+Table cast_member as CM {
+cast_member_id int [pk]
+gender int
+known_for_department varchar
+name varchar
+original_name varchar
+profile_path varchar
+popularity float
+note: "table 'cast_member' contains the information about the cast members of the movies"
+}
+Table cast_lookup as CL {
+movie_id int [pk]
+cast_member_id int [pk]
+character varchar
+note: "table cast_lookup contains the information about the cast members id and the movie id. This is eventually going to be joined with the movie table."
+}
+Table reviews as R {
+movie_id int [pk]
+author_name varchar
+creat_date varchar
+rating float
+content varchar
+note: "table 'reviews' contains the reviews for different movies from the audience and later used to merge with the movie release."
+}
+Ref: R.movie_id > M.id  
+Ref: G.id > M.id
+Ref: L.code > M.language
+Ref: MR.movie_id > M.id
+Ref: CC.iso_3166_1 > MR.iso_3166_1
+Ref: CM.cast_member_id > CL.cast_member_id
+Ref: CL.movie_id > M.id 
